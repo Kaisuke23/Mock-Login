@@ -85,7 +85,7 @@ def UserMenu(userData):
             print('What currency would you like to convert to?')
             print('EX: USD, JPY, PHP')
             print('you are currently using: '+userData[2])
-            convertFrom = str(input()).upper
+            convertFrom = str(input()).upper()
             exitCurrency = 0
             while exitCurrency != 1:
                 if userData[2] == 'USD':
@@ -204,15 +204,12 @@ def UserFind(recList, user):
             print('Thank you, that will be the end of this transaction. Good bye')
         if newUser == 'n':
             print('Goodbye')
-    for i in range(0, len(recList)):
-        print(recList[i])
     return recList
 
 
 def main():
     recDB = open('records.txt', 'r')
     print('Welcome to the Financial Calculator')
-    #print('Enter your user name')
     user = str(input('Enter your user name\n'))
     recList = list(recDB)
     uFound = 0
@@ -220,7 +217,6 @@ def main():
     recList = UserFind(recList, user)
     recDB = open('records.txt', 'w')
     for x in range(0, len(recList)):
-        # print(recList[x])
         recDB.write(' '.join(recList[x]) + '\n' )
 
     recDB.close()
