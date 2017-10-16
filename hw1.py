@@ -199,7 +199,8 @@ def UserFind(recList, user):
             else:
                 theAmount = '0'
             tempList = [newUserName,theAmount,typeOfCurrency]
-            recList += tempList
+            ' '.join(tempList)
+            recList.append(tempList)
             print('Thank you, that will be the end of this transaction. Good bye')
         if newUser == 'n':
             print('Goodbye')
