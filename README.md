@@ -7,6 +7,31 @@ but none of the classes here at UH Manoa has taught python.
 
 This will be utilizing the powers of Python 3.
 
+Before we start anything, we need to import some libraries for this project.
+we will be installing one library in particular. it is called passlib.
+
+The library uses the PBKDF2 Hashing function
+
+An example of the hash looks like
+
+```
+$pbkdf2-sha256$6400$.6UI/S.nXIk8jcbdHx3Fhg$98jZicV16ODfEsEZeYPGHU3kbrUrvUEXOPimVSQDD44
+```
+
+*** or ***
+```
+$pbkdf2-digest$rounds$salt$checksum
+```
+---
+To install the library
+```
+pip3 install passlib
+```
+*** or ***
+```
+pip install passlib
+```
+
 To start it you you have to enter
 ```
 python3 hw1.py
