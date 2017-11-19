@@ -137,9 +137,11 @@ def currencyExchange(userData):
 
 
 def UserMenu(userData, recList):
+    SendBack = []
     choice = 0
+    exitCounter = 0
     print('What would you like to do?')
-    while choice != 6:
+    while choice != 6 and exitCounter <= 6:
         print('1. MAINT')
         print('2. ADD FUNDS')
         print('3. TAKE FUNDS')
@@ -160,17 +162,20 @@ def UserMenu(userData, recList):
             print('your new ammount is: '+userData[1])
         elif choice == 4:
             userInput = input('Please enter a user you would like to delete: ')
-            UserDeleting(userInput, recList)
+            recList = UserDeleting(userInput, recList)
         elif choice == 5:
             userInput = input('Please enter a user you would like to transfer funds to: ')
             transferAccount = accountFinding(recList,userInput)
             print(transferAccount[0])
         elif choice == 6:
             print('Goodbye')
+            exitCounter = 6
         else:
-            print('Invalid Entry')
-
-    return userData
+            print('Invalid Entry or too many tries ')
+            exitCounter += 1
+    SendBack.append(userData)
+    SendBack.append(recList)
+    return SendBack
     currDB.close()
 
 def UserDeleting(userTobeDeleted,recList):
@@ -179,13 +184,14 @@ def UserDeleting(userTobeDeleted,recList):
         if userTobeDeleted == recList[i][0]:
             finderNumber = i
     if finderNumber != 0:
-        userInput = input('We have found the droids you were looking for. are you sure you want to delete?')
-        verifyInput = input('Are you sure?')
-    if userInput == verifyInput:
+        userInput = input('We have found the droids you were looking for. are you sure you want to delete? (y/n) ')
+        verifyInput = input('Are you sure? (y/n) ')
+    if userInput.upper() == verifyInput.upper():
         print('User has been deleted')
         recList[finderNumber:finderNumber+1] = []
     else:
         print('Verification failed. did not delete')
+    return recList
 
 def accountFinding(recList, userToBeFound):
     finderNumber = 0
@@ -193,9 +199,9 @@ def accountFinding(recList, userToBeFound):
         if userToBeFound == recList[i][0]:
             return recList[i]
 
-def UserIs(recList, user, password):
+def UserIs(recList,user, password):
     hash = pbkdf2_sha256.hash(password)
-    if user == str(recList[0]) and pbkdf2_sha256.verify(password,hash):
+    if user == str(recList[0]) and pbkdf2_sha256.verify(password,recList[3]) == True:
         return True
 
 def UserFind(recList, user):
@@ -207,7 +213,7 @@ def UserFind(recList, user):
     for i in range(0, len(recList)):
         findList.append(recList[i].split())
         recList[i] = findList[i]
-        isThisTheGuy = UserIs(findList[i], user, x)
+        isThisTheGuy = UserIs(findList[i],user, x)
         if isThisTheGuy == True:
             uFound = 1
             findingNumber = i;
@@ -215,7 +221,9 @@ def UserFind(recList, user):
     if uFound == 1:
         print('Welcome ' + user)
         print('You currently have ' + findList[findingNumber][1] + ' '+ findList[findingNumber][2])
-        recList[findingNumber] = UserMenu(findList[findingNumber],findList)
+        ListFinder = UserMenu(findList[findingNumber],findList)
+        recList[findingNumber] = ListFinder[0]
+        recList = ListFinder[1]
     else:
         print('User not found')
         print('Would you like to add yourself as a user?')
