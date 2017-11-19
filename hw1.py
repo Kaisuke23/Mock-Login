@@ -163,26 +163,21 @@ def UserMenu(userData):
     currDB.close()
 
 def UserIs(recList, user, password):
-    makeAList = []
-    for i in range(0, len(recList)):
-        makeAList.append(recList[i].split())
-        # recList[i] = makeAList[i]
-        print(str(makeAList[i][3]))
-        hash = pbkdf2_sha256.hash(password)
-        if user == str(makeAList[i][0]) and pbkdf2_sha256.verify(str(makeAList[i][3]),hash):
-            print("i have been seen")
-            print(hash)
+    hash = pbkdf2_sha256.hash(password)
+    if user == str(recList[0]) and pbkdf2_sha256.verify(password,hash):
+        return True
 
 def UserFind(recList, user):
     uFound = 0
     findList = []
     findingNumber = 0
     x = getpass.getpass()
-    findNuber = UserIs(recList, user, x)
+    isThisTheGuy = False
     for i in range(0, len(recList)):
         findList.append(recList[i].split())
         recList[i] = findList[i]
-        if user == str(findList[i][0]):
+        isThisTheGuy = UserIs(findList[i], user, x)
+        if isThisTheGuy == True:
             uFound = 1
             findingNumber = i;
 
@@ -198,24 +193,31 @@ def UserFind(recList, user):
         if newUser == 'y':
             print('Enter new User Name')
             newUserName = str(input())
-            exitCode = 0;
-            while exitCode is not 1:
-                typeOfCurrency = str(input('Please type in the currency (either USD, JPY, or PHP): '))
-                if typeOfCurrency != 'USD' and typeOfCurrency != 'JPY' and typeOfCurrency != 'PHP':
-                    print('Not a valid type of currency. please input either USD, JPY, PHP as the correct term')
-                else:
-                    exitCode = 1
-
-            print('Would you like to add funds to your account? y/n')
-            newUser = str(input()).lower()
-            if newUser == 'y':
-                theAmount = input('How much would you like to add in ' + typeOfCurrency + '?: ');
+            print('Enter new Password')
+            newPassword = getpass.getpass()
+            print('Verify new Password')
+            VarifyPassword = getpass.getpass()
+            if newPassword == VarifyPassword:
+                newPassword = pbkdf2_sha256.hash(VarifyPassword)
+                exitCode = 0;
+                while exitCode is not 1:
+                    typeOfCurrency = str(input('Please type in the currency (either USD, JPY, or PHP): '))
+                    if typeOfCurrency != 'USD' and typeOfCurrency != 'JPY' and typeOfCurrency != 'PHP':
+                        print('Not a valid type of currency. please input either USD, JPY, PHP as the correct term')
+                    else:
+                        exitCode = 1
+                        print('Would you like to add funds to your account? y/n')
+                        newUser = str(input()).lower()
+                        if newUser == 'y':
+                            theAmount = input('How much would you like to add in ' + typeOfCurrency + '?: ');
+                        else:
+                            theAmount = '0'
+                        tempList = [newUserName,theAmount,typeOfCurrency,newPassword]
+                        ' '.join(tempList)
+                        recList.append(tempList)
+                        print('Thank you, that will be the end of this transaction. Good bye')
             else:
-                theAmount = '0'
-            tempList = [newUserName,theAmount,typeOfCurrency]
-            ' '.join(tempList)
-            recList.append(tempList)
-            print('Thank you, that will be the end of this transaction. Good bye')
+                print("Passwords did not match. Please try again at a later date.")
         if newUser == 'n':
             print('Goodbye')
     return recList
