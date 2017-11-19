@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+import getpass
+from passlib.hash import pbkdf2_sha256
 recDB = open('records.txt', 'r')
 
 
@@ -161,10 +162,23 @@ def UserMenu(userData):
     return userData
     currDB.close()
 
+def UserIs(recList, user, password):
+    makeAList = []
+    for i in range(0, len(recList)):
+        makeAList.append(recList[i].split())
+        # recList[i] = makeAList[i]
+        print(str(makeAList[i][3]))
+        hash = pbkdf2_sha256.hash(password)
+        if user == str(makeAList[i][0]) and pbkdf2_sha256.verify(str(makeAList[i][3]),hash):
+            print("i have been seen")
+            print(hash)
+
 def UserFind(recList, user):
     uFound = 0
     findList = []
     findingNumber = 0
+    x = getpass.getpass()
+    findNuber = UserIs(recList, user, x)
     for i in range(0, len(recList)):
         findList.append(recList[i].split())
         recList[i] = findList[i]
