@@ -24,15 +24,15 @@ def ClearList(recList):
     for j in range(0, len(recList)):
         recList[j] = recList[j].replace("\n", "")
     return recList
-
-def wonderLust(array):
-    if(array[1].isdigit()):
-        new_val = int(array[1]) + 0
-        array[1] = str(new_val)
-        return array
-    else:
-        print("WARNING: {} is not an integer".format(array[1]))
-        return []
+# Why did i make this...... O this was a template on adding stuff to an account
+# def wonderLust(array):
+#     if(array[1].isdigit()):
+#         new_val = int(array[1]) + 0
+#         array[1] = str(new_val)
+#         return array
+#     else:
+#         print("WARNING: {} is not an integer".format(array[1]))
+#         return []
 
 def add_to_amount(array, amt):
     if(array[1].isdigit()):
@@ -51,9 +51,7 @@ def sub_to_amount(array, amt):
     else:
         print("WARNING: {} is not an integer".format(array[1]))
         return []
-
-def UserMenu(userData):
-
+def currencyExchange(userData):
     currDB = open('newcurr.txt', 'r')
     currList = list(currDB)
     newCurrList = []
@@ -70,81 +68,87 @@ def UserMenu(userData):
         toWhere.append(newCurrList[j][-1])
 
 
-    choice = 0
+    # choice = 0
     convertFrom = ''
     convertFromValue = 0
     total = 0
 
+    print('What currency would you like to convert to?')
+    print('EX: USD, JPY, PHP')
+    print('you are currently using: '+userData[2])
+    convertFrom = str(input()).upper()
+    exitCurrency = 0
+    while exitCurrency != 1:
+        if userData[2] == 'USD':
+            if convertFrom == 'USD':
+                print('No change')
+            elif convertFrom == 'JPY':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'JPY' and toWhere[i] == 'toUSD':
+                        calculations = 0
+                        calculations = int(userData[1]) * float(inTheCurrency[i])
+                        print('You would be at '+ str(calculations) + ' YEN or JPY')
+                        # print( calculations + 'Yen or JPY')
+
+            elif convertFrom == 'PHP':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'PHP' and toWhere[i] == 'toUSD':
+                        calculations = 0
+                        calculations = int(userData[1]) * float(inTheCurrency[i])
+                        print('You would be at '+ str(calculations) + ' Peso or PHP')
+            exitCurrency = 1
+        # JAPANESE EXCHANGE
+        elif userData[2] == 'JPY':
+            if convertFrom == 'USD':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'USD' and toWhere[i] == 'toYen':
+                        calculations = 0
+                        calculations = int(userData[1]) * float(inTheCurrency[i])
+                        print('You would be at '+ str(calculations) + ' USD or Dollars')
+                        # print( calculations + 'Yen or JPY')
+            elif convertFrom == 'JPY':
+                print('No change')
+            elif convertFrom == 'PHP':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'PHP' and toWhere[i] == 'toYen':
+                        calculations = 0
+                        calculations = int(userData[1]) * float(inTheCurrency[i])
+                        print('You would be at '+ str(calculations) + ' Peso or PHP')
+            exitCurrency = 1
+        elif userData[2] == 'PHP':
+            if convertFrom == 'USD':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'USD' and toWhere[i] == 'toPHP':
+                        calculations = 0
+                        calculations = int(userData[1]) * float(inTheCurrency[i])
+                        print('You would be at '+ str(calculations) + ' USD or Dollars')
+                        # print( calculations + 'Yen or JPY')
+            elif convertFrom == 'JPY':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'JPY' and toWhere[i] == 'toPHP':
+                        calculations = 0
+                        calculations = int(userData[1]) * float(inTheCurrency[i])
+                        print('You would be at '+ str(calculations) + ' Yen or JPY')
+            elif convertFrom == 'PHP':
+                print('No change')
+            exitCurrency = 1
+        else:
+            print('Not a valid input')
+
+
+def UserMenu(userData, recList):
+    choice = 0
     print('What would you like to do?')
-    while choice != 4:
+    while choice != 6:
         print('1. MAINT')
         print('2. ADD FUNDS')
         print('3. TAKE FUNDS')
-        print('4. EXIT')
+        print('4. DELETE USER')
+        print('5. TRANSFER FUNDS')
+        print('6. EXIT')
         choice = int(input())
         if choice == 1:
-            print('What currency would you like to convert to?')
-            print('EX: USD, JPY, PHP')
-            print('you are currently using: '+userData[2])
-            convertFrom = str(input()).upper()
-            exitCurrency = 0
-            while exitCurrency != 1:
-                if userData[2] == 'USD':
-                    if convertFrom == 'USD':
-                        print('No change')
-                    elif convertFrom == 'JPY':
-                        for i in range(0, len(currency)):
-                            if currency[i] == 'JPY' and toWhere[i] == 'toUSD':
-                                calculations = 0
-                                calculations = int(userData[1]) * float(inTheCurrency[i])
-                                print('You would be at '+ str(calculations) + ' YEN or JPY')
-                                # print( calculations + 'Yen or JPY')
-
-                    elif convertFrom == 'PHP':
-                        for i in range(0, len(currency)):
-                            if currency[i] == 'PHP' and toWhere[i] == 'toUSD':
-                                calculations = 0
-                                calculations = int(userData[1]) * float(inTheCurrency[i])
-                                print('You would be at '+ str(calculations) + ' Peso or PHP')
-                    exitCurrency = 1
-                # JAPANESE EXCHANGE
-                elif userData[2] == 'JPY':
-                    if convertFrom == 'USD':
-                        for i in range(0, len(currency)):
-                            if currency[i] == 'USD' and toWhere[i] == 'toYen':
-                                calculations = 0
-                                calculations = int(userData[1]) * float(inTheCurrency[i])
-                                print('You would be at '+ str(calculations) + ' USD or Dollars')
-                                # print( calculations + 'Yen or JPY')
-                    elif convertFrom == 'JPY':
-                        print('No change')
-                    elif convertFrom == 'PHP':
-                        for i in range(0, len(currency)):
-                            if currency[i] == 'PHP' and toWhere[i] == 'toYen':
-                                calculations = 0
-                                calculations = int(userData[1]) * float(inTheCurrency[i])
-                                print('You would be at '+ str(calculations) + ' Peso or PHP')
-                    exitCurrency = 1
-                elif userData[2] == 'PHP':
-                    if convertFrom == 'USD':
-                        for i in range(0, len(currency)):
-                            if currency[i] == 'USD' and toWhere[i] == 'toPHP':
-                                calculations = 0
-                                calculations = int(userData[1]) * float(inTheCurrency[i])
-                                print('You would be at '+ str(calculations) + ' USD or Dollars')
-                                # print( calculations + 'Yen or JPY')
-                    elif convertFrom == 'JPY':
-                        for i in range(0, len(currency)):
-                            if currency[i] == 'JPY' and toWhere[i] == 'toPHP':
-                                calculations = 0
-                                calculations = int(userData[1]) * float(inTheCurrency[i])
-                                print('You would be at '+ str(calculations) + ' Yen or JPY')
-                    elif convertFrom == 'PHP':
-                        print('No change')
-                    exitCurrency = 1
-                else:
-                    print('Not a valid input')
-
+            currencyExchange(userData)
         elif choice == 2:
             userInput = input('Please enter an amout you want to add: ')
             userData = add_to_amount(userData,int(userInput))
@@ -155,12 +159,39 @@ def UserMenu(userData):
             userData = sub_to_amount(userData,int(userInput))
             print('your new ammount is: '+userData[1])
         elif choice == 4:
+            userInput = input('Please enter a user you would like to delete: ')
+            UserDeleting(userInput, recList)
+        elif choice == 5:
+            userInput = input('Please enter a user you would like to transfer funds to: ')
+            transferAccount = accountFinding(recList,userInput)
+            print(transferAccount[0])
+        elif choice == 6:
             print('Goodbye')
         else:
             print('Invalid Entry')
 
     return userData
     currDB.close()
+
+def UserDeleting(userTobeDeleted,recList):
+    finderNumber = 0
+    for i in range(0, len(recList)):
+        if userTobeDeleted == recList[i][0]:
+            finderNumber = i
+    if finderNumber != 0:
+        userInput = input('We have found the droids you were looking for. are you sure you want to delete?')
+        verifyInput = input('Are you sure?')
+    if userInput == verifyInput:
+        print('User has been deleted')
+        recList[finderNumber:finderNumber+1] = []
+    else:
+        print('Verification failed. did not delete')
+
+def accountFinding(recList, userToBeFound):
+    finderNumber = 0
+    for i in range(0, len(recList)):
+        if userToBeFound == recList[i][0]:
+            return recList[i]
 
 def UserIs(recList, user, password):
     hash = pbkdf2_sha256.hash(password)
@@ -184,7 +215,7 @@ def UserFind(recList, user):
     if uFound == 1:
         print('Welcome ' + user)
         print('You currently have ' + findList[findingNumber][1] + ' '+ findList[findingNumber][2])
-        recList[findingNumber] = UserMenu(findList[findingNumber])
+        recList[findingNumber] = UserMenu(findList[findingNumber],findList)
     else:
         print('User not found')
         print('Would you like to add yourself as a user?')
