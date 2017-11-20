@@ -51,10 +51,16 @@ Here i will give some screen captures of the service
 
 this is a small example of the code.
 
-as you can see there is 4 choices to choose from.
+You will be asked to log in. and there is a password that associates with your account.
+
+If you don't have an account you will be asked to create an account. 
+
+as you can see there is 5 choices to choose from.
 + MAINT
 + ADD FUNDS
 + TAKE FUNDS
++ DELETE USER
++ TRANSFER FUNDS
 + EXIT
 
 MAINT is basically the conversion. it takes your bank account and it shows the conversion of what you give it.
@@ -62,5 +68,9 @@ MAINT is basically the conversion. it takes your bank account and it shows the c
 ADD FUNDS self explainitory
 
 TAKE FUNDS self explainitory
+
+DELETE USER is deleting a user from the list but you can't delete yourself. an error will occur. You do need verification, if you fail the verification then you will fail the deletion.
+
+TRANSFER FUNDS Transfering fund from your account to someone elses account, the program will know how to translate the different currency
 
 EXIT self explainitory
