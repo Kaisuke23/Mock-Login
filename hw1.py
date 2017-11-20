@@ -51,6 +51,7 @@ def sub_to_amount(array, amt):
     else:
         print("WARNING: {} is not an integer".format(array[1]))
         return []
+
 def currencyExchange(userData):
     currDB = open('newcurr.txt', 'r')
     currList = list(currDB)
@@ -135,6 +136,89 @@ def currencyExchange(userData):
         else:
             print('Not a valid input')
 
+def currencyExchangeCalculator(userData,toChangeTo, amount):
+    toReturn = 0
+    currDB = open('newcurr.txt', 'r')
+    currList = list(currDB)
+    newCurrList = []
+    currency, inTheCurrency, reverse, toWhere  = [], [], [], []
+
+    for i in range(0, len(currList)):
+        newCurrList.append(currList[i].split())
+
+    #Curr1 to Standard the from Standard
+    for j in range (0, len(currList)):
+        currency.append(newCurrList[j][0])
+        inTheCurrency.append(newCurrList[j][-3])
+        reverse.append(newCurrList[j][-2])
+        toWhere.append(newCurrList[j][-1])
+
+
+    convertFrom = ''
+    convertFromValue = 0
+    total = 0
+
+    convertFrom = toChangeTo
+    exitCurrency = 0
+    while exitCurrency != 1:
+        # USD Exchange
+        if userData[2] == 'USD':
+            if convertFrom == 'USD':
+                # print('No change')
+                toReturn = int(amount)
+            elif convertFrom == 'JPY':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'JPY' and toWhere[i] == 'toUSD':
+                        calculations = 0
+                        calculations = int(amount) * float(inTheCurrency[i])
+                        toReturn = calculations
+            elif convertFrom == 'PHP':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'PHP' and toWhere[i] == 'toUSD':
+                        calculations = 0
+                        calculations = int(amount) * float(inTheCurrency[i])
+                        toReturn = calculations
+            exitCurrency = 1
+        # JAPANESE EXCHANGE
+        elif userData[2] == 'JPY':
+            if convertFrom == 'USD':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'USD' and toWhere[i] == 'toYen':
+                        calculations = 0
+                        calculations = int(amount) * float(inTheCurrency[i])
+                        toReturn = calculations
+            elif convertFrom == 'JPY':
+                # print('No change')
+                toReturn = int(amount)
+            elif convertFrom == 'PHP':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'PHP' and toWhere[i] == 'toYen':
+                        calculations = 0
+                        calculations = int(amount) * float(inTheCurrency[i])
+                        toReturn = calculations
+            exitCurrency = 1
+        # PHP Exchange
+        elif userData[2] == 'PHP':
+            if convertFrom == 'USD':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'USD' and toWhere[i] == 'toPHP':
+                        calculations = 0
+                        calculations = int(amount) * float(inTheCurrency[i])
+                        toReturn = calculations
+            elif convertFrom == 'JPY':
+                for i in range(0, len(currency)):
+                    if currency[i] == 'JPY' and toWhere[i] == 'toPHP':
+                        calculations = 0
+                        calculations = int(amount) * float(inTheCurrency[i])
+                        toReturn = calculations
+            elif convertFrom == 'PHP':
+                # print('No change')
+                toReturn = int(amount)
+            exitCurrency = 1
+        else:
+            print('Not a valid input')
+        return toReturn
+
 
 def UserMenu(userData, recList):
     SendBack = []
@@ -164,9 +248,11 @@ def UserMenu(userData, recList):
             userInput = input('Please enter a user you would like to delete: ')
             recList = UserDeleting(userInput, recList)
         elif choice == 5:
+            transferedAccounts = []
             userInput = input('Please enter a user you would like to transfer funds to: ')
             transferAccount = accountFinding(recList,userInput)
-            print(transferAccount[0])
+            transferedAccounts = transferFunds(userData, transferAccount)
+            print(transferedAccounts)
         elif choice == 6:
             print('Goodbye')
             exitCounter = 6
@@ -178,6 +264,24 @@ def UserMenu(userData, recList):
     return SendBack
     currDB.close()
 
+def transferFunds(toTransferFrom, toTransferTo):
+    toReturn = []
+    userAmountToGive = input('Please enter the amount you want to give: ')
+    amountGive = currencyExchangeCalculator(toTransferFrom,toTransferTo[2],userAmountToGive)
+    print(amountGive)
+    amountFrom = currencyExchangeCalculator(toTransferTo,toTransferFrom[2], amountGive)
+    print(amountFrom)
+    toReturn = transferHelper(toTransferFrom, toTransferTo, userAmountToGive, amountGive)
+    return toReturn
+
+def transferHelper(toTransferFrom, toTransferTo, amoutToTakeAway, amountToGive):
+    transferSendBack = []
+    add_to_amount(toTransferTo, amountToGive)
+    sub_to_amount(toTransferFrom, int(amoutToTakeAway))
+    transferSendBack.append(toTransferFrom)
+    transferSendBack.append(toTransferTo)
+    return transferSendBack
+
 def UserDeleting(userTobeDeleted,recList):
     finderNumber = 0
     for i in range(0, len(recList)):
@@ -185,7 +289,7 @@ def UserDeleting(userTobeDeleted,recList):
             finderNumber = i
     if finderNumber != 0:
         userInput = input('We have found the droids you were looking for. are you sure you want to delete? (y/n) ')
-        verifyInput = input('Are you sure? (y/n) ')
+        verifyInput = input('Are you sure? all funds in the account go back to the bank. (y/n) ')
     if userInput.upper() == verifyInput.upper():
         print('User has been deleted')
         recList[finderNumber:finderNumber+1] = []
